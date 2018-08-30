@@ -56,12 +56,14 @@ int main()
     int i = 0;
     int a[10] = {23,44,44,44,55,65,65,65,76,81};
     int range[2] = {0};
+    int len = sizeof(a) / sizeof(int);
+    int l = sizeof(range) / sizeof(int);
     binary_search(a, 10, 65, range);
     printf("[");
-    for (;i < 2;i++)
+    for (;i < l;i++)
     {
         printf("%d", range[i]);
-        if (i != 2 - 1)
+        if (i != l - 1)
         {
             printf(",");
         }
