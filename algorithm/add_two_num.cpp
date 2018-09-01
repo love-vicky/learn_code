@@ -9,60 +9,80 @@ using namespace std;
 
 class Solution {
 public:
-    void _add_node(ListNode** l, int v)
+    void _init_list(ListNode **l)
     {
-        ListNode *_l = *l;
-        if (_l == NULL)
+        (*l) = new ListNode(-1);
+        (*l)->next = NULL;
+    }
+    void _insert_node(ListNode* l, int v)
+    {
+        while(l->next != NULL)
         {
-            _l = new ListNode(v);
+            l = l->next;
         }
-        else
-        {
-            while(_l->next != NULL)
-            {
-                _l = _l->next;
-            }
-            _l->next = new ListNode(v);
-        }
+        l->next = new ListNode(v);
     }
 
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode *_l1 = l1;
-        ListNode *_l2 = l2;
-        ListNode *l3 = NULL;
+        ListNode *l3,*_l3 = NULL;
         int tmp = 0;
         int res = 0;
         int carry = 0;
 
-        while (_l1 != NULL || _l2 != NULL)
+        _init_list(&l3);
+
+        while (l1 != NULL || l2 != NULL)
         {
-            if (_l1 != NULL && _l2 != NULL)
+            if (l1 != NULL && l1->val == -1)
             {
-                tmp = _l1->val + _l2->val + carry;
+                l1 = l1->next;
             }
-            else if (_l1 != NULL)
+            if (l2 != NULL && l2->val == -1)
             {
-                tmp = _l1->val + carry;
+                l2 = l2->next;
+            }
+            if (l1 != NULL && l2 != NULL)
+            {
+                tmp = l1->val + l2->val + carry;
+            }
+            else if (l1 != NULL)
+            {
+                tmp = l1->val + carry;
             }
             else
             {
-                tmp = _l2->val + carry;
+                tmp = l2->val + carry;
             }
             
             carry = 0;
-            if (tmp > 10)
+            if (tmp >= 10)
             {
                 carry = 1;
                 res = tmp % 10;
-            }
             
-            _add_node(&l3, res);
+                _insert_node(l3, res);
+            }
+            else
+            {
+                _insert_node(l3, tmp);
+            }
 
-            _l1 = _l1->next;
-            _l2 = _l2->next;
+            if (l1 != NULL)
+            {
+                l1 = l1->next;
+            }
+            if (l2 != NULL)
+            {
+                l2 = l2->next;
+            }
         }
 
-        return l3;
+        if (carry != 0)
+        {
+            _insert_node(l3, carry);
+        }
+
+        return l3->next;
     }
 };
 
@@ -71,12 +91,16 @@ int main(int argc, char const *argv[])
     ListNode *l1,*l2, *l3 = NULL;
     Solution *s = new Solution;
 
-    s->_add_node(&l1,2);
-    s->_add_node(&l1,4);
-    s->_add_node(&l1,3);
-    s->_add_node(&l2,5);
-    s->_add_node(&l2,6);
-    s->_add_node(&l2,4);
+    s->_init_list(&l1);
+    s->_init_list(&l2);
+
+    s->_insert_node(l1,2);
+    s->_insert_node(l1,4);
+    s->_insert_node(l1,3);
+    
+    s->_insert_node(l2,5);
+    s->_insert_node(l2,6);
+    s->_insert_node(l2,4);
 
     l3 = s->addTwoNumbers(l1,l2);
 
