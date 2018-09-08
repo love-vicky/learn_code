@@ -4,13 +4,7 @@
 #include <algorithm>
 
 using namespace std;
-struct {
-    bool operator()(string a, string b) {
-        string c = a + b;
-        string d = b + a;
-        return c > d;
-    }
-}Compare;
+
 class Solution {
 public:
     string largestNumber(vector<int>& nums) {
@@ -22,7 +16,11 @@ public:
         for (int i = 0; i < nums.size(); i++) {
             nums_tmp.push_back(to_string(nums[i]));
         }
-        sort(nums_tmp.begin(), nums_tmp.end(), Compare);
+        sort(nums_tmp.begin(), nums_tmp.end(), [](string &a, string &b){
+            string c = a + b;
+            string d = b + a;
+            return c > d;
+        });
 
         for (int i = 0; i < nums_tmp.size(); i++){
             res_number.append(nums_tmp[i]);
